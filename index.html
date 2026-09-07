@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FinCalc Pro - Smart Interest & Loan Planner</title>
+    
+    <!-- External Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- External CSS File -->
+    <link rel="stylesheet" href="css/styles.css">
+
+    <!-- External Charting & PDF Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body>
+    <!-- Header & Navigation -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-calculator"></i>
+                    <span>FinCalc Pro</span>
+                </div>
+                <nav class="nav-menu">
+                    <a href="#home" class="nav-link active" data-section="home">
+                        <i class="fas fa-home"></i> Home
+                    </a>
+                    <a href="#calculator" class="nav-link" data-section="calculator">
+                        <i class="fas fa-calculator"></i> Calculator
+                    </a>
+                    <a href="#comparison" class="nav-link" data-section="comparison">
+                        <i class="fas fa-chart-bar"></i> Comparison
+                    </a>
+                    <a href="#installment" class="nav-link" data-section="installment">
+                        <i class="fas fa-calendar-alt"></i> Installments
+                    </a>
+                    <a href="#recommendations" class="nav-link" data-section="recommendations">
+                        <i class="fas fa-lightbulb"></i> Tips
+                    </a>
+                    <a href="#history" class="nav-link" data-section="history">
+                        <i class="fas fa-history"></i> History
+                    </a>
+                </nav>
+                <div class="header-controls">
+                    <select id="currencySelect" class="currency-select">
+                        <option value="USD">USD ($)</option>
+                        <option value="EUR">EUR (€)</option>
+                        <option value="GBP">GBP (£)</option>
+                        <option value="INR">INR (₹)</option>
+                        <option value="JPY">JPY (¥)</option>
+                        <option value="AUD">AUD (A$)</option>
+                        <option value="PKR">PKR (Pakistani Rupee ₨)</option>
+                    </select>
+                    <button id="themeToggle" class="theme-btn" title="Toggle Theme">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="main">
+        <div class="container">
+            <!-- Home Section -->
+            <section id="home" class="section active">
+                <div class="hero">
+                    <h1>Welcome to FinCalc Pro</h1>
+                    <p>Your Smart Interest & Loan Planning Companion</p>
+                </div>
+
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <i class="fas fa-percentage"></i>
+                        <h3>Simple Interest</h3>
+                        <p>Calculate simple interest with ease</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-chart-line"></i>
+                        <h3>Compound Interest</h3>
+                        <p>Track exponential growth</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-balance-scale"></i>
+                        <h3>Compare Plans</h3>
+                        <p>Compare different financial scenarios</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-chart-pie"></i>
+                        <h3>Visualize</h3>
+                        <p>See growth through charts</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-calendar-alt"></i>
+                        <h3>Installments</h3>
+                        <p>Plan monthly payments</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-file-pdf"></i>
+                        <h3>PDF Reports</h3>
+                        <p>Download detailed reports</p>
+                    </div>
+                </div>
+
+                <div class="health-score-section">
+                    <h2>Your Financial Health Score</h2>
+                    <div class="health-score-display">
+                        <div class="score-circle">
+                            <svg class="score-ring" viewBox="0 0 120 120">
+                                <circle class="score-ring-bg" cx="60" cy="60" r="54"/>
+                                <circle class="score-ring-fill" id="scoreRingFill" cx="60" cy="60" r="54"/>
+                            </svg>
+                            <span id="healthScore">--</span>
+                            <p>Score</p>
+                        </div>
+                        <div class="score-info">
+                            <p id="healthMessage">Start calculating to get your financial health score</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="quick-start">
+                    <h2>Quick Start</h2>
+                    <div class="quick-buttons">
+                        <button class="btn btn-primary" onclick="switchSection('calculator')">
+                            <i class="fas fa-calculator"></i> Start Calculating
+                        </button>
+                        <button class="btn btn-secondary" onclick="switchSection('comparison')">
+                            <i class="fas fa-chart-bar"></i> Compare Plans
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Calculator Section -->
+            <section id="calculator" class="section">
+                <h2>Financial Calculator</h2>
+                
+                <div class="calculator-container">
+                    <div class="calculator-input">
+                        <h3>Calculate Interest</h3>
+                        
+                        <div class="form-group">
+                            <label for="principal">Principal Amount</label>
+                            <input type="number" id="principal" placeholder="Enter principal amount" min="0" step="0.01">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="rate">Rate of Interest (% per annum)</label>
+                            <input type="number" id="rate" placeholder="Enter interest rate" min="0" step="0.01">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="time">Time Period (Years)</label>
+                            <input type="number" id="time" placeholder="Enter time period" min="0" step="0.5">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="compoundFrequency">Compounding Frequency (for CI)</label>
+                            <select id="compoundFrequency">
+                                <option value="1">Annually</option>
+                                <option value="2">Semi-annually</option>
+                                <option value="4">Quarterly</option>
+                                <option value="12">Monthly</option>
+                                <option value="365">Daily</option>
+                            </select>
+                        </div>
+
+                        <button class="btn btn-primary btn-block" onclick="calculateInterest()">
+                            <i class="fas fa-calculator"></i> Calculate
+                        </button>
+                    </div>
+
+                    <div class="calculator-results">
+                        <h3>Results</h3>
+                        <div id="resultsContainer" class="results-container">
+                            <p class="placeholder">Results will appear here</p>
+                        </div>
+                        <button class="btn btn-secondary btn-block" id="saveCalculation" onclick="saveCalculation()" style="display: none;">
+                            <i class="fas fa-save"></i> Save to History
+                        </button>
+                    </div>
+                </div>
+
+                <div class="chart-section" id="chartSection" style="display: none;">
+                    <h3><i class="fas fa-chart-area"></i> Financial Growth Visualization</h3>
+                    <div class="charts-grid">
+                        <div class="chart-card">
+                            <h4><i class="fas fa-chart-line"></i> Growth Over Time</h4>
+                            <canvas id="growthChart"></canvas>
+                        </div>
+                        <div class="chart-card">
+                            <h4><i class="fas fa-chart-pie"></i> Principal vs Interest</h4>
+                            <canvas id="breakdownChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Comparison Section -->
+            <section id="comparison" class="section">
+                <h2>Interest Comparison Dashboard</h2>
+                
+                <div class="comparison-container">
+                    <div class="comparison-inputs">
+                        <h3>Compare Two Scenarios</h3>
+                        
+                        <div class="comparison-scenario">
+                            <h4>Scenario 1</h4>
+                            <div class="form-group">
+                                <label for="comp1Principal">Principal</label>
+                                <input type="number" id="comp1Principal" placeholder="Principal" min="0" step="0.01">
+                            </div>
+                            <div class="form-group">
+                                <label for="comp1Rate">Rate (%)</label>
+                                <input type="number" id="comp1Rate" placeholder="Rate" min="0" step="0.01">
+                            </div>
+                            <div class="form-group">
+                                <label for="comp1Time">Time (Years)</label>
+                                <input type="number" id="comp1Time" placeholder="Time" min="0" step="0.5">
+                            </div>
+                        </div>
+
+                        <div class="comparison-scenario">
+                            <h4>Scenario 2</h4>
+                            <div class="form-group">
+                                <label for="comp2Principal">Principal</label>
+                                <input type="number" id="comp2Principal" placeholder="Principal" min="0" step="0.01">
+                            </div>
+                            <div class="form-group">
+                                <label for="comp2Rate">Rate (%)</label>
+                                <input type="number" id="comp2Rate" placeholder="Rate" min="0" step="0.01">
+                            </div>
+                            <div class="form-group">
+                                <label for="comp2Time">Time (Years)</label>
+                                <input type="number" id="comp2Time" placeholder="Time" min="0" step="0.5">
+                            </div>
+                        </div>
+
+                        <button class="btn btn-primary btn-block" onclick="compareScenarios()">
+                            <i class="fas fa-chart-bar"></i> Compare
+                        </button>
+                    </div>
+
+                    <div class="comparison-results">
+                        <h3>Comparison Results</h3>
+                        <div id="comparisonResults" class="results-container">
+                            <p class="placeholder">Comparison results will appear here</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chart-section" id="comparisonChartSection" style="display: none;">
+                    <h3><i class="fas fa-balance-scale"></i> Scenario Comparison Chart</h3>
+                    <div class="chart-card">
+                        <canvas id="comparisonChart"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Installment Planner Section -->
+            <section id="installment" class="section">
+                <h2>Monthly Installment Planner</h2>
+                
+                <div class="installment-container">
+                    <div class="installment-input">
+                        <h3>Plan Your Monthly Payments</h3>
+                        
+                        <div class="form-group">
+                            <label for="loanAmount">Loan Amount</label>
+                            <input type="number" id="loanAmount" placeholder="Enter loan amount" min="0" step="0.01">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="loanRate">Annual Interest Rate (%)</label>
+                            <input type="number" id="loanRate" placeholder="Enter interest rate" min="0" step="0.01">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="loanTenure">Loan Tenure (Months)</label>
+                            <input type="number" id="loanTenure" placeholder="Enter tenure in months" min="1" step="1">
+                        </div>
+
+                        <button class="btn btn-primary btn-block" onclick="calculateInstallment()">
+                            <i class="fas fa-calculator"></i> Calculate EMI
+                        </button>
+                    </div>
+
+                    <div class="installment-results">
+                        <h3>EMI Details</h3>
+                        <div id="installmentResults" class="results-container">
+                            <p class="placeholder">EMI details will appear here</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="installmentTableSection" style="display: none;">
+                    <h3>Amortization Schedule</h3>
+                    <div class="table-responsive">
+                        <table id="installmentTable" class="installment-table">
+                            <thead>
+                                <tr>
+                                    <th>Month</th>
+                                    <th>Principal</th>
+                                    <th>Interest</th>
+                                    <th>EMI</th>
+                                    <th>Balance</th>
+                                </tr>
+                            </thead>
+                            <tbody id="installmentTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Recommendations Section -->
+            <section id="recommendations" class="section">
+                <h2>Smart Financial Suggestions</h2>
+                <div id="recommendationsContainerNav" class="recommendations-grid" style="margin-top: 2rem;">
+                    <p class="placeholder">Perform a calculation to get personalized financial recommendations</p>
+                </div>
+            </section>
+
+            <!-- History Section -->
+            <section id="history" class="section">
+                <h2>Calculation History</h2>
+                
+                <div class="history-controls">
+                    <button class="btn btn-secondary" id="downloadAllBtn" onclick="downloadAllReports()">
+                        <i class="fas fa-download"></i> Download All Reports
+                    </button>
+                    <button class="btn btn-danger" id="clearHistoryBtn" onclick="openDeleteModal()">
+                        <i class="fas fa-trash"></i> Clear History
+                    </button>
+                </div>
+
+                <div id="historyContainer" class="history-container">
+                    <p class="placeholder">No calculations saved yet</p>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 FinCalc Pro. Smart Interest & Loan Planner. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Clear History</h2>
+                <button class="modal-close" onclick="closeDeleteModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete all calculations? This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeDeleteModal()">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
+                <button class="btn btn-danger" onclick="confirmDeleteHistory()">
+                    <i class="fas fa-trash"></i> Delete All
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- External JavaScript File -->
+    <script src="js/script.js"></script>
+</body>
+</html>
